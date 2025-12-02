@@ -623,17 +623,9 @@
   }
 }
 </script>
-  <link rel="stylesheet" href="/index.css">
-</head>
+  </head>
   <body>
     <div id="root"></div>
-    <!-- Dynamic script loading to prevent caching issues on iOS/Safari -->
-    <script>
-      var script = document.createElement('script');
-      script.type = 'module';
-      script.src = '/index.tsx?v=' + new Date().getTime();
-      document.body.appendChild(script);
-    </script>
-  <script type="module" src="/index.tsx"></script>
-</body>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>
