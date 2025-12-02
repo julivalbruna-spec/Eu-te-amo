@@ -1,0 +1,284 @@
+
+/* --- IMPROVED ADMIN PANEL STYLES (SAAS LOOK - Glassmorphism & Dark Mode) --- */
+
+.admin-page-background {
+  background-color: var(--admin-bg);
+  color: var(--admin-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- THEME: MIDNIGHT (DEFAULT) --- */
+[data-admin-theme="midnight"] {
+    --admin-bg: #000000;
+    --admin-card-bg: rgba(20, 20, 23, 0.8);
+    --admin-border: rgba(255, 255, 255, 0.1);
+    --admin-text: #f4f4f5;
+    --admin-accent: #ffae00; /* Yellow */
+    --admin-radius: 0.5rem; /* 8px */
+    --admin-sidebar-bg: #0c0c0e;
+    --admin-sidebar-width: 280px;
+}
+
+/* --- THEME: INTELLI (MODERN/ROUNDED) --- */
+[data-admin-theme="intelli"] {
+    --admin-bg: #09090b; /* Zinc 950 */
+    --admin-card-bg: rgba(24, 24, 27, 0.6); /* Zinc 900 with transparency */
+    --admin-border: rgba(255, 255, 255, 0.05);
+    --admin-text: #fafafa;
+    --admin-accent: #f97316; /* Orange */
+    --admin-radius: 1.5rem; /* 24px */
+    --admin-sidebar-bg: rgba(24, 24, 27, 0.5); /* Floating effect */
+    --admin-sidebar-width: 260px;
+}
+
+/* --- THEME: CRYPTO (FUTURE/GLASS) --- */
+[data-admin-theme="crypto"] {
+    --admin-bg: #030014; /* Deep Space Blue */
+    --admin-card-bg: rgba(19, 19, 30, 0.6); /* Glassy dark blue-ish */
+    --admin-border: rgba(124, 58, 237, 0.2); /* Purple tint border */
+    --admin-text: #e2e8f0;
+    --admin-accent: #8b5cf6; /* Violet 500 */
+    --admin-radius: 1.25rem; /* 20px */
+    --admin-sidebar-bg: rgba(15, 23, 42, 0.4);
+    --admin-sidebar-width: 270px;
+}
+
+/* --- COMPONENT STYLES USING VARIABLES --- */
+
+.admin-card {
+  background: var(--admin-card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, border-radius 0.3s ease;
+}
+
+/* Intelli Theme Specific Overrides */
+[data-admin-theme="intelli"] .admin-card {
+    box-shadow: 
+        0 0 0 1px rgba(255,255,255,0.05),
+        0 10px 30px -10px rgba(0,0,0,0.5);
+}
+
+/* Crypto Theme Specific Overrides */
+[data-admin-theme="crypto"] .admin-card {
+    box-shadow: 
+        0 0 0 1px rgba(139, 92, 246, 0.1), /* Purple glow border */
+        0 10px 40px -10px rgba(139, 92, 246, 0.1); /* Purple glow shadow */
+}
+
+[data-admin-theme="intelli"] .admin-sidebar-container {
+    margin: 1rem;
+    height: calc(100vh - 2rem);
+    border-radius: var(--admin-radius);
+    border: 1px solid var(--admin-border);
+    background-color: var(--admin-sidebar-bg);
+    backdrop-filter: blur(20px);
+}
+
+[data-admin-theme="crypto"] .admin-sidebar-container {
+    margin: 1rem;
+    height: calc(100vh - 2rem);
+    border-radius: var(--admin-radius);
+    border: 1px solid var(--admin-border);
+    background-color: var(--admin-sidebar-bg);
+    backdrop-filter: blur(24px);
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.05);
+}
+
+[data-admin-theme="midnight"] .admin-sidebar-container {
+    height: 100vh;
+    border-right: 1px solid var(--admin-border);
+    background-color: var(--admin-sidebar-bg);
+}
+
+
+.admin-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Subtle top highlight for cards */
+.admin-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+}
+
+.admin-card-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--admin-border);
+  background-color: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-card-content {
+  padding: 1.5rem;
+}
+
+/* Modern Inputs */
+.admin-input, 
+input[type="text"], 
+input[type="number"], 
+input[type="email"], 
+input[type="password"],
+input[type="date"],
+select, 
+textarea {
+  background-color: rgba(0, 0, 0, 0.4); /* Darker input background */
+  border: 1px solid var(--admin-border);
+  border-radius: 0.75rem; /* 12px - Inputs always somewhat rounded */
+  padding: 0.7rem 1rem;
+  color: var(--admin-text);
+  outline: none;
+  transition: all 0.2s ease;
+  font-size: 0.925rem;
+  font-weight: 400;
+  font-family: 'Inter', sans-serif;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #71717a;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 2px rgba(var(--admin-accent), 0.15); /* Requires rgb calc or hardcoded fallback */
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Modern Buttons inside Admin */
+button {
+  transition: all 0.2s ease;
+}
+
+/* Modern Tables */
+table {
+  width: 100%;
+  border-collapse: separate; 
+  border-spacing: 0; 
+  font-size: 0.9rem;
+}
+
+thead th {
+  background-color: rgba(39, 39, 42, 0.4);
+  color: #a1a1aa;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 1rem;
+  border-bottom: 1px solid var(--admin-border);
+  text-align: left;
+}
+
+thead th:first-child { border-top-left-radius: 0.5rem; }
+thead th:last-child { border-top-right-radius: 0.5rem; }
+
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #e4e4e7;
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* --- Live Preview Phone --- */
+.admin-preview-mockup {
+    position: relative;
+    width: 414px; /* Wider phone (Max/Plus size) */
+    height: 850px;
+    background-color: #121212;
+    border: 12px solid #27272a; /* Thicker border */
+    border-radius: 3.5rem; 
+    box-shadow: 
+       0 0 0 2px #18181b,
+       0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    padding: 0;
+}
+.phone-preview-screen {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 2.8rem; 
+    background-color: #000;
+    overflow: hidden;
+}
+
+/* Admin Sidebar Item Active State */
+.sidebar-item-active {
+    background: linear-gradient(90deg, rgba(255, 174, 0, 0.1) 0%, transparent 100%);
+    border-left: 3px solid var(--admin-accent);
+    color: #fff;
+}
+
+/* --- ADMIN ADVANCED OPTIONS TOGGLE --- */
+.advanced-options-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, opacity 0.3s ease-out, margin-top 0.4s ease-out;
+    opacity: 0;
+    margin-top: 0;
+}
+.advanced-options-content.visible {
+    max-height: 3000px; /* Large enough for any content */
+    opacity: 1;
+    margin-top: 1rem; /* Add some space when opened */
+    transition: max-height 0.6s ease-in, opacity 0.5s ease-in 0.1s, margin-top 0.6s ease-in;
+}
+
+/* Custom Scrollbar Specific for Admin Panels */
+.custom-scrollbar::-webkit-scrollbar, 
+.admin-content-area::-webkit-scrollbar {
+    width: 6px;
+    display: block;
+}
+.custom-scrollbar::-webkit-scrollbar-track, 
+.admin-content-area::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb, 
+.admin-content-area::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover, 
+.admin-content-area::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+}
+
+.admin-content-area::-webkit-scrollbar {
+    width: 8px;
+}
+.admin-content-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+.admin-content-area::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+.admin-content-area::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255,255,255,0.2);
+}

@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Prevent Caching for Safari/iOS compatibility -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="icon" id="favicon" type="image/png" href="https://firebasestorage.googleapis.com/v0/b/iphone-rios-2025-976d2.firebasestorage.app/o/uploads%2Fn089eHcsNMcSEW7fmTeMLALXXFF2%2F1762581268051_iphone-rios-logo.png?alt=media&token=19884066-2faf-4e94-ba4c-b66ddb69b4b3" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>iPhone Rios</title>
+    
+    <!-- SEO Meta Tags (will be updated dynamically) -->
+    <meta name="description" content="A fully functional e-commerce web application for iPhone Rios, specializing in the sale of new and pre-owned iPhones, accessories, and other electronics.">
+    <meta name="keywords" content="iPhone, Apple, seminovos, Entre Rios, Bahia, assistência técnica">
+    <meta property="og:title" content="iPhone Rios">
+    <meta property="og:description" content="A fully functional e-commerce web application for iPhone Rios, specializing in the sale of new and pre-owned iPhones, accessories, and other electronics.">
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/iphone-rios-2025-976d2.firebasestorage.app/o/uploads%2Fn089eHcsNMcSEW7fmTeMLALXXFF2%2F1762581268051_iphone-rios-logo.png?alt=media&token=19884066-2faf-4e94-ba4c-b66ddb69b4b3">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/heic2any@0.0.4/dist/heic2any.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      /* Fallback variables */
+      :root {
+          --background: #000000;
+          --surface: #0a0a0a;
+          --primary-text: #FFFFFF; 
+          --secondary-text: #A1A1AA;
+          --border-color: #27272A;
+          --brand-yellow: #ffae00;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+          font-family: 'Inter', sans-serif; /* Cleaner font for UI */
+          background-color: var(--background);
+          color: var(--primary-text);
+          overflow-x: hidden;
+      }
+
+      /* Store-specific font override */
+      .store-font {
+          font-family: 'Poppins', sans-serif;
+      }
+      
+      .selection\:bg-yellow-500\/50::selection {
+        background-color: rgba(234, 179, 8, 0.5);
+      }
+      .selection\:text-black::selection {
+        color: #000;
+      }
+
+      /* Preloader */
+      #preloader {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          background: var(--background);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+      }
+      #preloader.hidden {
+          opacity: 0;
+          visibility: hidden;
+      }
+      .preloader-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 255, 255, 0.1);
+        border-top-color: var(--brand-yellow);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+      }
+
+      /* Typing Effect */
+      .typing-cursor::after {
+          content: '|';
+          animation: blink 0.7s infinite;
+      }
+      @keyframes blink {
+          50% { opacity: 0; }
+      }
+
+      /* Product Card Details/Form Expansion */
+      .details-content {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height: 0.5s ease-out, padding 0.5s ease-out, margin 0.5s ease-out;
+          padding: 0;
+      }
+      .details-content.visible {
+          max-height: 600px; 
+          transition: max-height 0.5s ease-in;
+      }
+      
+      /* Sidebar Menu */
+      .sidebar-menu {
+          transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-menu.open {
+          transform: translateX(0);
+      }
+      .sidebar-menu.closed {
+          transform: translateX(-100%);
+      }
+
+      /* Marquee Animation */
+      .marquee {
+          overflow: hidden;
+          position: relative;
+          white-space: nowrap;
+      }
+      .marquee-content {
+          display: inline-block;
+          animation: marquee 40s linear infinite;
+      }
+      .marquee-content span {
+          margin: 0 2rem;
+          font-weight: 600; /* semibold */
+          text-transform: uppercase;
+          letter-spacing: 0.05em; /* tracking-wider */
+      }
+      @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+      }
+
+      /* Hide scrollbar but allow scrolling */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+      }
+      
+      /* 
+         Mobile-like Scrollbar Behavior:
+         Hide scrollbar track/thumb to prevent layout shifts in the preview iframe.
+         This ensures the full width is used for content, preventing button text wrapping.
+      */
+      ::-webkit-scrollbar {
+          width: 0px;
+          background: transparent;
+      }
+
+      /* Product Card Hover */
+      .product-card-container {
+        transition: transform 0.3s ease;
+      }
+      .product-card-container:hover {
+        transform: translateY(-4px);
+      }
+
+      /* --- PRODUCT CAROUSEL ANIMATION (STORE) --- */
+       .roleta-container {
+        position: relative;
+        width: 100%;
+        margin-top: 0.5rem; /* mt-2 */
+        height: var(--roleta-height-mobile, 240px);
+      }
+      @media (min-width: 768px) {
+        .roleta-container {
+          margin-top: 0;
+          height: var(--roleta-height-desktop, 300px);
+        }
+      }
+      @keyframes roleta-flow-store {
+          0% { transform: translateX(-280px) scale(0.7); opacity: 1; z-index: 10; }
+          25% { transform: translateX(0) scale(1); opacity: 1; z-index: 20; }
+          50% { transform: translateX(280px) scale(0.7); opacity: 1; z-index: 10; }
+          75% { transform: translateX(0) scale(0.4); opacity: 0; z-index: 5; }
+          100% { transform: translateX(-280px) scale(0.7); opacity: 1; z-index: 10; }
+      }
+      @media (max-width: 767px) {
+        @keyframes roleta-flow-store {
+          0% { transform: translateX(-110px) scale(0.7); opacity: 1; z-index: 10; }
+          25% { transform: translateX(0) scale(1); opacity: 1; z-index: 20; }
+          50% { transform: translateX(110px) scale(0.7); opacity: 1; z-index: 10; }
+          75% { transform: translateX(0) scale(0.4); opacity: 0; z-index: 5; }
+          100% { transform: translateX(-110px) scale(0.7); opacity: 1; z-index: 10; }
+        }
+        .container {
+            max-width: 500px;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+      }
+
+      /* --- PRODUCT CAROUSEL ANIMATION (BIO PAGE) --- */
+      .background-lights {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+          overflow: hidden;
+          pointer-events: none;
+      }
+      .light {
+          position: absolute;
+          width: 400px;
+          height: 400px;
+          background: var(--brand-yellow);
+          border-radius: 50%;
+          filter: blur(100px);
+          opacity: 0.2;
+          will-change: transform;
+      }
+      .light.one { animation: roam-light-1 30s ease-in-out infinite; }
+      .light.two { animation: roam-light-2 25s ease-in-out infinite; }
+      @keyframes roam-light-1 {
+          0% { transform: translate(-20vw, -20vh) scale(0.8); }
+          50% { transform: translate(70vw, 80vh) scale(1.2); }
+          100% { transform: translate(-20vw, -20vh) scale(0.8); }
+      }
+      @keyframes roam-light-2 {
+          0% { transform: translate(80vw, 10vh) scale(0.7); }
+          50% { transform: translate(-10vw, 60vh) scale(1.1); }
+          100% { transform: translate(80vw, 10vh) scale(0.7); }
+      }
+       @keyframes roleta-flow-bio {
+          0% { transform: translateX(-120px) scale(0.7); opacity: 1; z-index: 10; }
+          25% { transform: translateX(0) scale(1); opacity: 1; z-index: 20; }
+          50% { transform: translateX(120px) scale(0.7); opacity: 1; z-index: 10; }
+          75% { transform: translateX(0) scale(0.4); opacity: 0; z-index: 5; }
+          100% { transform: translateX(-120px) scale(0.7); opacity: 1; z-index: 10; }
+      }
+
+      /* --- BANNER CAROUSEL (FADE & BLUR) --- */
+      .banner-fade-container {
+          position: relative;
+          display: grid;
+      }
+      .banner-slide {
+          grid-area: 1 / 1;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity var(--banner-transition-duration, 1.2s) ease-in-out, filter var(--banner-transition-duration, 1.2s) ease-in-out;
+          filter: blur(8px);
+          will-change: opacity, filter;
+      }
+      .banner-slide.active-banner {
+          opacity: 1;
+          visibility: visible;
+          filter: blur(0px);
+          z-index: 1;
+      }
+
+      /* --- HERO CAROUSEL (SLIDING ANIMATION) --- */
+      .hero-carousel-container {
+        position: relative;
+        display: grid;
+        overflow: hidden;
+      }
+      .hero-slide {
+          grid-area: 1 / 1;
+          transform: translateX(100%);
+          transition: transform 1s cubic-bezier(0.45, 0, 0.55, 1);
+          will-change: transform;
+      }
+      .initial-load .hero-slide.active-hero {
+          transition: none;
+      }
+      .hero-slide.active-hero {
+          transform: translateX(0);
+          z-index: 1;
+      }
+      .hero-slide.exiting-hero {
+          transform: translateX(100%);
+          z-index: 0;
+      }
+
+      /* --- HERO TYPING FADE EFFECT --- */
+      .hero-title-text, .hero-subtitle-text {
+          transition: opacity 0.5s ease-in-out;
+          opacity: 1;
+      }
+      .hero-title-text.fading, .hero-subtitle-text.fading {
+          opacity: 0;
+      }
+
+      /* --- Aurora Background Effect --- */
+      .aurora-background {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          overflow: hidden;
+          z-index: 0;
+      }
+      .aurora-bg-element {
+          position: absolute;
+          border-radius: 50%;
+          will-change: transform, opacity;
+          animation-name: aurora-roam-complex;
+          animation-timing-function: ease-in-out;
+          animation-iteration-count: infinite;
+          width: 500px;
+          height: 500px;
+      }
+      @keyframes aurora-roam-complex {
+          0% { transform: translate(-20vw, -20vh) scale(0.8) rotate(0deg); opacity: 0.4; }
+          25% { transform: translate(50vw, 30vh) scale(1.1) rotate(45deg); opacity: 0.5; }
+          50% { transform: translate(80vw, -10vh) scale(0.9) rotate(-20deg); opacity: 0.3; }
+          75% { transform: translate(10vw, 70vh) scale(1.2) rotate(60deg); opacity: 0.6; }
+          100% { transform: translate(-20vw, -20vh) scale(0.8) rotate(0deg); opacity: 0.4; }
+      }
+      .aurora-bg-element:nth-child(1) { animation-duration: 30s; }
+      .aurora-bg-element:nth-child(2) { animation-delay: -7s; animation-duration: 35s; }
+      .aurora-bg-element:nth-child(3) { animation-delay: -14s; animation-duration: 28s; }
+      .aurora-bg-element:nth-child(4) { animation-delay: -21s; animation-duration: 40s; }
+      .aurora-bg-element:nth-child(5) { animation-delay: -28s; animation-duration: 32s; }
+
+
+      /* --- BANNER ANIMATIONS --- */
+       /* --- Product Focus Loop Animation --- */
+      .focus-loop-container {
+          position: relative;
+          width: 100%;
+          height: var(--roleta-height-mobile, 240px);
+      }
+      @media (min-width: 768px) {
+        .focus-loop-container {
+          height: var(--roleta-height-desktop, 300px);
+        }
+      }
+      .focus-loop-slide {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          opacity: 0;
+          transform: scale(0.8);
+          visibility: hidden;
+          transition-property: opacity, transform;
+          transition-timing-function: ease-in-out;
+      }
+      .focus-loop-slide.active-slide {
+          opacity: 1;
+          visibility: visible;
+          transform: scale(1);
+      }
+      .focus-loop-slide.exiting-slide {
+          opacity: 0;
+          transform: translateX(120%);
+          visibility: hidden;
+          transition-property: opacity, transform, visibility;
+          transition-timing-function: ease-in-out;
+      }
+      .focus-loop-text-container {
+          text-align: center;
+          position: relative;
+          height: 2.5rem; /* Give it some space */
+          margin-top: 1rem;
+          overflow: hidden;
+      }
+      .focus-loop-text {
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+          position: absolute;
+          width: 100%;
+          left: 0;
+          right: 0;
+      }
+      .focus-loop-text.active-text {
+          opacity: 1;
+          transform: translateY(0);
+      }
+      
+      /* --- NEW HERO ANIMATIONS --- */
+
+      .positionable-carousel-container {
+          transform: translate(var(--carousel-offset-x-mobile, 0px), var(--carousel-offset-y-mobile, 0px));
+          transition: transform 0.3s ease-out;
+      }
+      @media (min-width: 768px) {
+          .positionable-carousel-container {
+              transform: translate(var(--carousel-offset-x-desktop, 0px), var(--carousel-offset-y-desktop, 0px));
+          }
+      }
+
+      /* Floating */
+      @keyframes float {
+          0% { transform: translateY(0); }
+          50% { transform: translateY(var(--float-height, -12px)); }
+          100% { transform: translateY(0); }
+      }
+      .floating-img {
+          animation: float var(--float-duration, 4s) ease-in-out infinite;
+          filter: drop-shadow(0 15px 20px rgba(0,0,0,0.15));
+      }
+
+      /* Crossfade */
+      .crossfade-slide {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          transition: opacity var(--crossfade-duration, 1.2s) ease-in-out;
+      }
+      .crossfade-slide.active-slide {
+          opacity: 1;
+      }
+      .crossfade-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      /* Motion Blur */
+      .motion-blur-slide {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          transform: translateX(100%);
+          opacity: 0;
+          filter: blur(var(--motion-blur-amount, 12px));
+          transition: all var(--motion-blur-duration, 0.7s) ease;
+      }
+      .motion-blur-slide.active-slide {
+          transform: translateX(0);
+          opacity: 1;
+          filter: blur(0);
+      }
+      .motion-blur-slide.exiting-slide {
+          transform: translateX(-100%);
+          opacity: 0;
+          filter: blur(var(--motion-blur-amount, 12px));
+      }
+      .motion-blur-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      /* Scroll Reveal (JS driven) */
+      .scroll-reveal-img {
+          transition: transform 0.2s ease-out;
+          will-change: transform;
+      }
+
+
+      @keyframes glow {
+          0%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--brand-yellow), 0 0 20px var(--brand-yellow); }
+          50% { text-shadow: 0 0 10px #fff, 0 0 20px var(--brand-yellow), 0 0 30px var(--brand-yellow), 0 0 40px var(--brand-yellow); }
+      }
+      .animate-glowing-text h2 {
+          animation: glow 3s ease-in-out infinite;
+      }
+      
+      @keyframes slide-in-left {
+        from { transform: translateX(-50%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slide-in-right {
+        from { transform: translateX(50%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      .animate-slide-in-cascade h2 {
+          animation: slide-in-left 1s ease-out forwards;
+      }
+      .animate-slide-in-cascade p {
+          animation: slide-in-right 1s ease-out 0.2s forwards;
+      }
+
+      @keyframes zoom-and-fade-in {
+        from { transform: scale(0.9); opacity: 0; filter: blur(5px); }
+        to { transform: scale(1); opacity: 1; filter: blur(0); }
+      }
+      .animate-zoom-and-fade > .content-wrapper {
+          animation: zoom-and-fade-in 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      }
+
+      @keyframes pulse-subtle {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+      }
+      @keyframes shine {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+      }
+      .animate-pulse-and-shine h2 {
+          animation: pulse-subtle 4s ease-in-out infinite;
+          position: relative;
+      }
+       .animate-pulse-and-shine h2::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: linear-gradient(to right, transparent 20%, rgba(255,255,255,0.5) 50%, transparent 80%);
+          background-size: 200% auto;
+          animation: shine 3s linear infinite;
+          pointer-events: none;
+       }
+      
+      /* --- Minimalist Checkout Story Page Animations --- */
+      @keyframes story-product-float {
+        0%, 100% { transform: translateY(0) rotate(-2deg) scale(1); }
+        50% { transform: translateY(-15px) rotate(2deg) scale(1.05); }
+      }
+      .animate-story-float {
+        animation: story-product-float 6s ease-in-out infinite;
+      }
+      
+      .glass-shine {
+        overflow: hidden; /* Important for the shine effect */
+        position: relative;
+      }
+      .glass-shine::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 20%;
+          height: 200%;
+          background: linear-gradient(
+              to right,
+              rgba(255, 255, 255, 0) 0%,
+              rgba(255, 255, 255, 0.25) 50%,
+              rgba(255, 255, 255, 0) 100%
+          );
+          transform: rotate(45deg);
+          animation: shine-effect 4s ease-in-out infinite;
+          animation-delay: 1s; /* Add a small delay */
+          pointer-events: none;
+      }
+      @keyframes shine-effect {
+          0% { left: -75%; }
+          100% { left: 125%; }
+      }
+
+      @keyframes pulse-glow {
+          0%, 100% {
+              box-shadow: 0 0 10px -5px var(--glow-color, transparent);
+          }
+          50% {
+              box-shadow: 0 0 20px 5px var(--glow-color, transparent);
+          }
+      }
+      .animate-pulse-glow {
+          animation: pulse-glow 2.5s ease-in-out infinite;
+      }
+
+      /* --- MODAL ANIMATIONS --- */
+      @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+      .animate-fade-in { animation: fade-in 0.2s ease-out forwards; }
+      @keyframes scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+      .animate-scale-in { animation: scale-in 0.2s ease-out forwards; }
+
+      /* --- THEMEABLE COMPONENTS --- */
+      .theme-button-primary {
+        border-width: var(--button-primary-border-width);
+        border-style: solid;
+        border-color: var(--button-primary-border-color);
+      }
+      .theme-button-primary:hover {
+        background-color: var(--button-primary-background-hover);
+        color: var(--button-primary-text-hover);
+        border-color: var(--button-primary-border-color-hover);
+      }
+      .theme-footer-button:hover {
+        background-color: var(--footer-button-background-hover);
+        color: var(--footer-button-text-hover);
+      }
+      .hero-button-secondary {
+        background-color: var(--button-secondary-background);
+        color: var(--button-secondary-text);
+        border-color: var(--button-secondary-border);
+        border-width: 2px;
+      }
+      .hero-button-secondary:hover {
+        background-color: var(--button-secondary-background-hover);
+        color: var(--button-secondary-text-hover);
+        border-color: var(--button-secondary-border-hover);
+      }
+      .product-card-details-button {
+        color: var(--product-card-details-text);
+      }
+      .product-card-details-button:hover {
+        color: var(--product-card-details-text-hover);
+      }
+
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^6.25.1",
+    "react-feather": "https://aistudiocdn.com/react-feather@^2.0.10",
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js",
+    "firebase/storage": "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^0.15.0",
+    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/",
+    "@ffmpeg/ffmpeg": "https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js",
+    "@ffmpeg/util": "https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js",
+    "@ffmpeg/core": "https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm/ffmpeg-core.js",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <!-- Dynamic script loading to prevent caching issues on iOS/Safari -->
+    <script>
+      var script = document.createElement('script');
+      script.type = 'module';
+      script.src = '/index.tsx?v=' + new Date().getTime();
+      document.body.appendChild(script);
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
